@@ -1,0 +1,36 @@
+# Ignore Maven and Gradle build folders
+/target/
+/build/
+
+# Ignore IDE configuration files
+.idea/
+*.iml
+*.iws
+
+# Ignore IntelliJ IDEA project files
+*.ipr
+*.iws
+*.iml
+
+# Ignore Eclipse project files
+.project
+.classpath
+.settings/
+
+# Ignore Maven dependency cache
+/.m2/
+
+# Ignore Gradle dependency cache
+.gradle/
+build/
+
+# Ignore log files
+*.log
+
+# Ignore temporary files created by operating systems
+.DS_Store
+Thumbs.db
+
+# Ignore Spring Boot executable JAR/WAR files
+*.jar
+*.war
