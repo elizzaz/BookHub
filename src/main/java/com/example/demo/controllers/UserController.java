@@ -18,18 +18,18 @@ import java.util.List;
         private UserService userService;
 
         @GetMapping
-        public List<User> getAllUsers() {
+        public List<UserDTO> getAllUsers() {
             return userService.getAllUsers();
         }
 
         @PostMapping
         @ResponseStatus(HttpStatus.CREATED)
-        public User createUser(@Valid @RequestBody User user) {
-            return userService.createUser(user);
+        public UserDTO createUser(@Valid @RequestBody UserDTO userDTO) {
+            return userService.createUser(userDTO);
         }
 
         @GetMapping("/{id}")
-        public User getUserById(@PathVariable Long id) {
+        public UserDTO getUserById(@PathVariable Long id) {
             return userService.getUserById(id);
         }
 

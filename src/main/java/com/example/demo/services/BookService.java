@@ -15,24 +15,32 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    @Autowired
+    private BookMapper bookMapper;
+
+    public List<BookDTO> getAllBooks() {
+        return bookRepository.findAll().stream()
+                .map(bookMapper::toDto)
+                .toList();
     }
 
-    public Book createBook(Book book) {
-        return bookRepository.save(book);
+    public BookDTO createBook(BookDTO reviewDTO) {
+        Book review = bookMapper.toEntity(reviewDTO);
+        Book savedBook = bookRepository.save(review);
+        return bookMapper.toDto(savedBook);
     }
 
-    public Book getBookById(Long id) {
-        return bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
+    public BookDTO getBookById(Long id) {
+        Book review = bookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
+        return bookMapper.toDto(review);
     }
 
     public BookDTO updateBook(Long id, BookDTO updatedBookDTO) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
 
-        // Mappage entre BookDTO et Book
-        Book bookToUpdate = BookMapper.INSTANCE.bookDTOToBook(updatedBookDTO);
+        Book bookToUpdate = BookMapper.INSTANCE.toEntity(updatedBookDTO);
 
         book.setAuthor(bookToUpdate.getAuthor());
         book.setAvailable(bookToUpdate.getAvailable());
@@ -41,7 +49,7 @@ public class BookService {
         book.setLanguage(bookToUpdate.getLanguage());
         book.setTitle(bookToUpdate.getTitle());
 
-        return BookMapper.INSTANCE.bookToBookDTO(bookRepository.save(book));
+        return BookMapper.INSTANCE.toDto(bookRepository.save(book));
     }
 
     public void deleteBook(Long id) {

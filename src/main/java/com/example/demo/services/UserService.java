@@ -15,30 +15,39 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    @Autowired
+    private UserMapper userMapper;
+
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(userMapper::toDto)
+                .toList();
     }
 
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public UserDTO createUser(UserDTO userDTO) {
+        User user = userMapper.toEntity(userDTO);
+        User savedUser = userRepository.save(user);
+        return userMapper.toDto(savedUser);
     }
 
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    public UserDTO getUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return userMapper.toDto(user);
     }
+
 
     public UserDTO updateUser(Long id, UserDTO updatedUserDTO) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Mappage entre UserDTO et User
-        User userToUpdate = UserMapper.INSTANCE.userDTOToUser(updatedUserDTO);
+        User userToUpdate = UserMapper.INSTANCE.toEntity(updatedUserDTO);
 
         user.setEmail(userToUpdate.getEmail());
         user.setUsername(userToUpdate.getUsername());
         user.setPassword(userToUpdate.getPassword());
 
-        return UserMapper.INSTANCE.userToUserDTO(userRepository.save(user));
+        return UserMapper.INSTANCE.toDto(userRepository.save(user));
     }
 
     public void deleteUser(Long id) {

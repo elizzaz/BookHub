@@ -18,18 +18,18 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping
-    public List<Book> getAllBooks() {
+    public List<BookDTO> getAllBooks() {
         return bookService.getAllBooks();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Book createBook(@Valid @RequestBody Book book) {
-        return bookService.createBook(book);
+    public BookDTO createBook(@Valid @RequestBody BookDTO bookDTO) {
+        return bookService.createBook(bookDTO);
     }
 
     @GetMapping("/{id}")
-    public Book getBookById(@PathVariable Long id) {
+    public BookDTO getBookById(@PathVariable Long id) {
         return bookService.getBookById(id);
     }
 

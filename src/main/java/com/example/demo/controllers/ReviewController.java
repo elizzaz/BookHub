@@ -19,20 +19,21 @@ public class ReviewController {
     private ReviewService reviewService;
 
     @GetMapping
-    public List<Review> getAllReviews() {
+    public List<ReviewDTO> getAllReviews() {
         return reviewService.getAllReviews();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Review createReview(@Valid @RequestBody Review review) {
-        return reviewService.createReview(review);
+    public ReviewDTO createReview(@Valid @RequestBody ReviewDTO reviewDTO) {
+        return reviewService.createReview(reviewDTO);
     }
 
     @GetMapping("/{id}")
-    public Review getReviewById(@PathVariable Long id) {
+    public ReviewDTO getReviewById(@PathVariable Long id) {
         return reviewService.getReviewById(id);
     }
+
 
     @PutMapping("/{id}")
     public ReviewDTO updateReview(@PathVariable Long id, @RequestBody ReviewDTO updatedReviewDTO) {

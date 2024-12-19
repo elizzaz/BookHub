@@ -15,31 +15,39 @@ public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
 
-    public List<Review> getAllReviews() {
-        return reviewRepository.findAll();
+    @Autowired
+    private ReviewMapper reviewMapper;
+
+    public List<ReviewDTO> getAllReviews() {
+        return reviewRepository.findAll().stream()
+                .map(reviewMapper::toDto)
+                .toList();
     }
 
-    public Review createReview(Review review) {
-        return reviewRepository.save(review);
+    public ReviewDTO createReview(ReviewDTO reviewDTO) {
+        Review review = reviewMapper.toEntity(reviewDTO);
+        Review savedReview = reviewRepository.save(review);
+        return reviewMapper.toDto(savedReview);
     }
 
-    public Review getReviewById(Long id) {
-        return reviewRepository.findById(id).orElseThrow(() -> new RuntimeException("Review not found"));
+    public ReviewDTO getReviewById(Long id) {
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Review not found"));
+        return reviewMapper.toDto(review);
     }
 
     public ReviewDTO updateReview(Long id, ReviewDTO updatedReviewDTO) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Review not found"));
 
-        // Mappage entre ReviewDTO et Review
-        Review reviewToUpdate = ReviewMapper.INSTANCE.reviewDTOToReview(updatedReviewDTO);
+        Review reviewToUpdate = ReviewMapper.INSTANCE.toEntity(updatedReviewDTO);
 
         review.setRating(reviewToUpdate.getRating());
         review.setComment(reviewToUpdate.getComment());
         review.setBook(reviewToUpdate.getBook());
         review.setUser(reviewToUpdate.getUser());
 
-        return ReviewMapper.INSTANCE.reviewToReviewDTO(reviewRepository.save(review));
+        return ReviewMapper.INSTANCE.toDto(reviewRepository.save(review));
     }
 
     public void deleteReview(Long id) {
