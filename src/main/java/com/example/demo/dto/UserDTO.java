@@ -1,24 +1,17 @@
-package com.example.demo.Entities;
+package com.example.demo.dto;
 
-import jakarta.persistence.*;
+import com.example.demo.entities.Category;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
-@Entity
-public class Book {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private Long id;
+public class UserDTO {
     private String title;
     private String author;
     private String description;
     @Enumerated(EnumType.ORDINAL)
-        private Category category;
+    private Category category;
     private Boolean available;
     private String language;
-
-    public Long getId() {
-        return id;
-    }
 
     public String getTitle() {
         return title;

@@ -1,26 +1,14 @@
-package com.example.demo.Entities;
+package com.example.demo.dto;
 
-import jakarta.persistence.*;
+import com.example.demo.entities.Book;
+import com.example.demo.entities.User;
 
-@Entity
-public class Review {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private Long id;
+public class ReviewDTO {
     private int rating;
     private String comment;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "book_id")
     private Book book;
 
-    public Long getId() {
-        return id;
-    }
 
     public int getRating() {
         return rating;
