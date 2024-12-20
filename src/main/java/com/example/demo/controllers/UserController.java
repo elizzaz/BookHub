@@ -18,7 +18,7 @@ import java.util.List;
         private UserService userService;
 
         @GetMapping
-        public List<UserDTO> getAllUsers() {
+        public List<User> getAllUsers() {
             return userService.getAllUsers();
         }
 

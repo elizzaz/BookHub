@@ -1,6 +1,7 @@
 package com.example.demo.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Book {
@@ -10,6 +11,8 @@ public class Book {
     private Long id;
     private String title;
     private String author;
+    @Lob
+    @Size(max = 1000000)
     private String description;
     @Enumerated(EnumType.ORDINAL)
         private Category category;

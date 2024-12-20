@@ -5,6 +5,7 @@ import com.example.demo.entities.User;
 import com.example.demo.mappers.UserMapper;
 import com.example.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,10 +19,10 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public List<UserDTO> getAllUsers() {
-        return userRepository.findAll().stream()
-                .map(userMapper::toDto)
-                .toList();
+    private final PasswordEncoder passwordEncoder;
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     public UserDTO createUser(UserDTO userDTO) {
@@ -48,6 +49,26 @@ public class UserService {
         user.setPassword(userToUpdate.getPassword());
 
         return UserMapper.INSTANCE.toDto(userRepository.save(user));
+    }
+
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+
+    public User registerUser(UserDTO userDTO) {
+        if (userRepository.existsByUsername(userDTO.getUsername())) {
+            throw new RuntimeException("Username already taken");
+        }
+
+        User user = new User();
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
+        return userRepository.save(user);
     }
 
     public void deleteUser(Long id) {

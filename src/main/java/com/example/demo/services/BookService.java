@@ -18,10 +18,8 @@ public class BookService {
     @Autowired
     private BookMapper bookMapper;
 
-    public List<BookDTO> getAllBooks() {
-        return bookRepository.findAll().stream()
-                .map(bookMapper::toDto)
-                .toList();
+    public List<Book> getAllBooks() {
+        return bookRepository.findAll();
     }
 
     public BookDTO createBook(BookDTO reviewDTO) {

@@ -1,14 +1,19 @@
 package com.example.demo.dto;
 
 import com.example.demo.entities.Category;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 public class BookDTO {
     private String title;
     private String author;
+        @Column(columnDefinition = "TEXT")
     private String description;
     private String language;
     private Boolean available;
-    private Category category;
+    @Enumerated(EnumType.ORDINAL)
+        private Category category;
 
     public String getTitle() {
         return title;

@@ -18,10 +18,8 @@ public class ReviewService {
     @Autowired
     private ReviewMapper reviewMapper;
 
-    public List<ReviewDTO> getAllReviews() {
-        return reviewRepository.findAll().stream()
-                .map(reviewMapper::toDto)
-                .toList();
+    public List<Review> getAllReviews() {
+        return reviewRepository.findAll();
     }
 
     public ReviewDTO createReview(ReviewDTO reviewDTO) {

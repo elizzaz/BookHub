@@ -5,58 +5,32 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
 public class UserDTO {
-    private String title;
-    private String author;
-    private String description;
-    @Enumerated(EnumType.ORDINAL)
-    private Category category;
-    private Boolean available;
-    private String language;
+    private String username;
+    private String email;
+    private String password;
 
-    public String getTitle() {
-        return title;
+    public String getUsername() {
+        return username;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getEmail() {
+        return email;
     }
 
-    public String getDescription() {
-        return description;
+    public String getPassword() {
+        return password;
     }
 
-    public Category getCategory() {
-        return category;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public Boolean getAvailable() {
-        return available;
-    }
-    public String getLanguage(){
-        return language;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public void setAvailable(Boolean available) {
-        this.available = available;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
 }

@@ -19,7 +19,7 @@ public class ReviewController {
     private ReviewService reviewService;
 
     @GetMapping
-    public List<ReviewDTO> getAllReviews() {
+    public List<Review> getAllReviews() {
         return reviewService.getAllReviews();
     }
 
