@@ -1,6 +1,7 @@
 package com.example.demo.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Review {
@@ -9,6 +10,8 @@ public class Review {
 
     private Long id;
     private int rating;
+    @Lob
+    @Size(max = 1000000)
     private String comment;
     @ManyToOne
     @JoinColumn(name = "user_id")

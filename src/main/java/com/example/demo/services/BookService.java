@@ -42,7 +42,7 @@ public class BookService {
 
         book.setAuthor(bookToUpdate.getAuthor());
         book.setAvailable(bookToUpdate.getAvailable());
-        book.setCategory(bookToUpdate.getCategory());
+        book.setCategories(bookToUpdate.getCategories());
         book.setDescription(bookToUpdate.getDescription());
         book.setLanguage(bookToUpdate.getLanguage());
         book.setTitle(bookToUpdate.getTitle());
