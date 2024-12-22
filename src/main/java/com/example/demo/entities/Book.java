@@ -17,7 +17,7 @@ public class Book {
     @Size(max = 1000000)
     private String description;
     @ElementCollection(targetClass = Category.class)
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     @CollectionTable(name = "book_categories", joinColumns = @JoinColumn(name = "book_id"))
     @Column(name = "category")
     private Set<Category> categories;
