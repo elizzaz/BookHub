@@ -3,6 +3,8 @@ package com.example.demo.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
+import java.util.Set;
+
 @Entity
 public class Book {
     @Id
@@ -14,8 +16,11 @@ public class Book {
     @Lob
     @Size(max = 1000000)
     private String description;
-    @Enumerated(EnumType.ORDINAL)
-        private Category category;
+    @ElementCollection(targetClass = Category.class)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "book_categories", joinColumns = @JoinColumn(name = "book_id"))
+    @Column(name = "category")
+    private Set<Category> categories;
     private Boolean available;
     private String language;
 
@@ -35,8 +40,8 @@ public class Book {
         return description;
     }
 
-    public Category getCategory() {
-        return category;
+    public Set<Category> getCategories() {
+        return categories;
     }
 
     public Boolean getAvailable() {
@@ -58,8 +63,8 @@ public class Book {
         this.description = description;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 
     public void setAvailable(Boolean available) {

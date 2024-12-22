@@ -4,16 +4,20 @@ import com.example.demo.entities.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Lob;
+import jakarta.validation.constraints.Size;
+
+import java.util.Set;
 
 public class BookDTO {
     private String title;
     private String author;
-        @Column(columnDefinition = "TEXT")
+    @Lob
+    @Size(max = 1000000)
     private String description;
     private String language;
     private Boolean available;
-    @Enumerated(EnumType.ORDINAL)
-        private Category category;
+    private Set<Category> categories;
 
     public String getTitle() {
         return title;
@@ -27,8 +31,8 @@ public class BookDTO {
         return description;
     }
 
-    public Category getCategory() {
-        return category;
+    public Set<Category> getCategories() {
+        return categories;
     }
 
     public Boolean getAvailable() {
@@ -50,8 +54,8 @@ public class BookDTO {
         this.description = description;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 
     public void setAvailable(Boolean available) {

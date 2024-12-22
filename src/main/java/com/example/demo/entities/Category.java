@@ -7,5 +7,10 @@ public enum Category {
     BD,
     HORROR,
     ROMANCE,
-    BIOGRAPHY
+    BIOGRAPHY,
+    NOVEL,
+    HISTORICAL,
+    ADVENTURE,
+    MYSTERY,
+    CLASSICS
 }
