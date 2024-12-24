@@ -20,7 +20,7 @@ public class BooksSearchController {
     @PostMapping("/reindex")
     public String reindexBooks() {
         try {
-            booksSearchService.indexAllBooks(); // Appelle la méthode d'indexation
+            booksSearchService.indexAllBooks();
             return "Réindexation réussie !";
         } catch (IOException e) {
             return "Erreur lors de la réindexation : " + e.getMessage();

@@ -26,17 +26,15 @@ public class BooksSearchService {
         this.bookRepository = bookRepository;
     }
 
-    // Méthode pour réindexer tous les livres
+    // Méthode pour réindexer tous les livres pour l'instant non syncro
     public void indexAllBooks() throws IOException {
-        // Récupère les livres depuis la base MySQL
         List<Book> books = bookRepository.findAll();
 
-        // Indexe chaque livre dans Elasticsearch
         for (Book book : books) {
             elasticsearchClient.index(i -> i
-                    .index("books") // Nom de l'index
-                    .id(String.valueOf(book.getId())) // ID
-                    .document(book) // Document à indexer
+                    .index("books")
+                    .id(String.valueOf(book.getId()))
+                    .document(book)
             );
         }
     }
@@ -57,21 +55,19 @@ public class BooksSearchService {
 //    }
 
     public List<Book> searchBooksByTitle(String title) throws IOException {
-        // Création de la requête match pour la recherche full-text
+        // request match pour la recherche full-text
         Query query = MatchQuery.of(m -> m
-                        .field("title")  // Champ dans lequel chercher
-                        .query(title))  // Valeur recherchée
+                        .field("title")  // Champ
+                        .query(title))  // Valeur
                 ._toQuery();
 
-        // Exécution de la recherche
         SearchResponse<Book> response = elasticsearchClient.search(s -> s
-                        .index("books") // Nom de l'index Elasticsearch
+                        .index("books") // index els
                         .query(query),
                 Book.class);
 
-        // Extraction des résultats
         return response.hits().hits().stream()
-                .map(Hit::source) // Extrait la source (le document Book)
+                .map(Hit::source)
                 .collect(Collectors.toList());
     }
 }
