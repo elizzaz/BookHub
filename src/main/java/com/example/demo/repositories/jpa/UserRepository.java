@@ -1,4 +1,4 @@
-package com.example.demo.repositories;
+package com.example.demo.repositories.jpa;
 
 import com.example.demo.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +9,5 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByUsername(String username);
-
     Optional<User> findByUsername(String username);
 }

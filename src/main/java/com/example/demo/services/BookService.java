@@ -3,7 +3,7 @@ package com.example.demo.services;
 import com.example.demo.dto.BookDTO;
 import com.example.demo.entities.Book;
 import com.example.demo.mappers.BookMapper;
-import com.example.demo.repositories.BookRepository;
+import com.example.demo.repositories.jpa.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class BookService {
     private BookMapper bookMapper;
 
     public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+        return (List<Book>) bookRepository.findAll();
     }
 
     public BookDTO createBook(BookDTO reviewDTO) {

@@ -3,7 +3,7 @@ package com.example.demo.services;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.entities.User;
 import com.example.demo.mappers.UserMapper;
-import com.example.demo.repositories.UserRepository;
+import com.example.demo.repositories.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
