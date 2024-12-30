@@ -1,127 +1,117 @@
-BookHub - Application de gestion et recherche des livres qui sont dans ma bibliothèques
+# BookHub - Gestion de Livres avec Recherche Elasticsearch
 
-Description 📚
+## Description 📖
+BookHub est une application de gestion de livres qui permet d'effectuer des opérations CRUD sur une base de données MySQL et d'indexer automatiquement les données dans Elasticsearch pour permettre des recherches avancées.
 
-BookHub est une application web de gestion et de recherche avancée de tous les livres que j'ai pu lire jusqu'a aujoudr'hui, construite avec Spring Boot, MySQL, et Elasticsearch. Elle propose des fonctionnalités CRUD pour gérer les livres, les utilisateurs et les critiques, ainsi qu'une recherche full-text optimisée avec Elasticsearch.
+---
 
-Fonctionnalités 🚀
+## Fonctionnalités 🚀
 
-Gestion des livres : Création, lecture, mise à jour et suppression (CRUD).
+### 1. Gestion des livres (CRUD)
+- Création, lecture, mise à jour et suppression de livres.
+- Validation des entrées utilisateur avec **Spring Boot Validation**.
 
-Gestion des utilisateurs : Enregistrement, authentification et gestion des comptes.
+### 2. Recherche avancée avec Elasticsearch 🔎
+- Recherche par **titre** (recherche full-text).
+- Recherche par **catégories** (correction simplifiée et fonctionnelle).
 
-Sécurité avancée : Authentification avec JWT pour sécuriser les endpoints.
+### 3. Sécurisation avec Spring Security 🔒
+- Authentification avec **JWT**.
+- Routes sécurisées pour les opérations Elasticsearch.
 
-Critiques et notes : Ajout de commentaires et de notes sur les livres.
+---
 
-Recherche avancée : Recherche full-text avec filtres par titre, auteur et catégorie grâce à Elasticsearch.
+## Technologies utilisées 🛠️
 
-Synchronisation avec MySQL : Importation manuelle des données de MySQL vers Elasticsearch.
+- **Backend :** Java Spring Boot
+- **Base de données :** MySQL (avec Docker)
+- **Moteur de recherche :** Elasticsearch (avec Docker)
+- **ORM :** Hibernate / JPA
+- **Sécurité :** Spring Security avec JWT
+- **Gestion des dépendances :** Maven
+- **Tests API :** Postman
 
-Technologies Utilisées 🛠️
+---
 
-Backend : Java, Spring Boot
+## Pré-requis ✅
 
-Base de données relationnelle : MySQL
+- **Docker** installé.
+- **Java 17+** installé.
+- **Maven** installé.
+- Elasticsearch et MySQL doivent être lancés via Docker.
 
-Moteur de recherche : Elasticsearch
+---
 
-Authentification : Spring Security, JWT
+## Installation 🛠️
 
-Gestion des dépendances : Maven
+1. Cloner le repository :
+```bash
+git clone https://github.com/votre-repo/bookhub.git
+```
 
-Conteneurisation : Docker
+2. Démarrer MySQL et Elasticsearch avec Docker :
+```bash
+docker-compose up -d
+```
 
-Tests API : Postman
-
-Prérequis ✅
-
-Java 17+
-
-Maven 3.8+
-
-Docker Desktop ou MySQL Server
-
-Elasticsearch 7.17+
-
-Installation et Lancement 🚦
-
-Étapes :
-
-Cloner le dépôt :
-
-git clone https://github.com/votre-utilisateur/BookHub.git
-
-Configurer la base de données MySQL :
-Lancer un conteneur Docker avec MySQL :
-
-docker run --name name -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:8
-
-Créer une base de données bookHub.
-
-Configurer Elasticsearch :
-Lancer un conteneur Docker pour Elasticsearch :
-
-docker run -d --name elasticsearch -p 9200:9200 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.17.13
-
-Configurer l'application :
-Mettre à jour le fichier src/main/resources/application.properties :
-
+3. Configurer l'application dans **`application.properties`** :
+```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/bookHub
 spring.datasource.username=root
 spring.datasource.password=root
-spring.elasticsearch.rest.uris=http://localhost:9200
-spring.jpa.hibernate.ddl-auto=update
+elasticsearch.host=localhost
+elasticsearch.port=9200
+```
 
-Construire et exécuter l'application :
-
+4. Installer les dépendances et démarrer l'application :
+```bash
 mvn clean install
 mvn spring-boot:run
+```
 
-Endpoints API 🔗
+---
 
-Authentification :
+## Routes API 🌐
 
-POST /api/auth/register - Crée un nouvel utilisateur.
+### Authentification 🔐
+- **Inscription :** `POST /api/auth/register`
+- **Connexion :** `POST /api/auth/login`
 
-POST /api/auth/login - Connecte un utilisateur et retourne un token JWT.
+### Gestion des livres 📚
+- **Créer un livre :** `POST /api/books`
+- **Obtenir tous les livres :** `GET /api/books`
+- **Obtenir un livre par ID :** `GET /api/books/{id}`
+- **Mettre à jour un livre :** `PUT /api/books/{id}`
+- **Supprimer un livre :** `DELETE /api/books/{id}`
 
-Livres :
+### Recherche Elasticsearch 🔎
+- **Recherche par titre :** `GET /api/els/bytitle?title=<title>`
+- **Recherche par catégories :** `GET /api/els/searchByCategories?categories=FICTION`
+- **Réindexation complète :** `POST /api/els/reindex`
 
-GET /api/books - Liste tous les livres.
+---
 
-POST /api/books - Ajoute un livre (authentifié).
+## Notes importantes ⚠️
 
-PUT /api/books/{id} - Met à jour un livre.
+- Les requêtes protégées nécessitent un **JWT valide** dans les headers :
+```
+Authorization: Bearer <token>
+```
+- Réindexer les données après toute modification dans MySQL :
+```
+POST /api/els/reindex
+```
 
-DELETE /api/books/{id} - Supprime un livre.
+---
 
-Critiques :
+## Prochaines étapes 🛠️
 
-POST /api/reviews - Ajoute une critique.
+- Ajouter la **pagination** et le **tri** dans les recherches Elasticsearch.
+- Synchroniser automatiquement MySQL ↔ Elasticsearch avec **Logstash**.
+- Tests unitaires pour sécuriser les fonctionnalités critiques.
 
-GET /api/reviews/{id} - Récupère une critique.
+---
 
-Recherche Elasticsearch :
+## Auteur ✍️
+Développé par Elizzaz.
 
-POST /api/search/reindex - Synchronise les données entre MySQL et Elasticsearch.
-
-GET /api/search/books/search?title={titre} - Recherche par titre.
-
-GET /api/search/books/filter?category={category} - Recherche par catégorie.
-
-Tests avec Postman 🧪
-
-Importer la collection Postman fournie (non incluse dans ce README).
-
-Tester chaque endpoint avec les exemples JSON fournis.
-
-Fonctionnalités Futures 🌟
-
-Synchronisation automatique entre MySQL et Elasticsearch.
-
-Frontend avec React pour une interface utilisateur dynamique.
-
-Pagination et tri dans les résultats Elasticsearch.
-
-Déploiement avec Kubernetes.
