@@ -2,9 +2,11 @@ package com.example.demo.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.util.Set;
 
+@Document(indexName = "books")
 @Entity
 public class Book {
     @Id
