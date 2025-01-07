@@ -2,6 +2,8 @@ package com.example.demo.controllers;
 
 import com.example.demo.entities.Book;
 import com.example.demo.services.ElasticSearchService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -29,17 +31,58 @@ public class ElasticSearchController {
     }
 
     @GetMapping("/bytitle")
-    public List<Book> searchBooksByTitle(@RequestParam String title) throws IOException {
-        return elasticSearchService.searchBooksByTitle(title);
+    public ResponseEntity<?> searchBooksByTitle(
+            @RequestParam String title,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        try {
+            List<Book> results = elasticSearchService.searchBooksByTitle(title, page, size);
+
+            if (results.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Aucun résultat trouvé.");
+            }
+
+            return ResponseEntity.ok(results);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur serveur.");
+        }
     }
 
-   // TODO A corriger
-//    @GetMapping("/searchByCategories")
-//    public List<Book> searchBooksByCategories(@RequestParam Set<String> categories) {
-//        try {
-//            return elasticSearchService.searchBooksByCategories(categories);
-//        } catch (IOException e) {
-//            throw new RuntimeException("Search failed", e);
-//        }
-//    }
+    @GetMapping("/searchByCategories")
+    public ResponseEntity<?> searchBooksByCategories(
+            @RequestParam Set<String> categories,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        try {
+            List<Book> results = elasticSearchService.searchBooksByCategories(categories, page, size);
+
+            if (results.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Aucun résultat trouvé.");
+            }
+
+            return ResponseEntity.ok(results);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur serveur.");
+        }
+    }
+
+
+    @GetMapping("/fulltext")
+    public ResponseEntity<?> searchFullText(
+            @RequestParam String query,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        try {
+            List<Book> results = elasticSearchService.searchFullText(query, page, size);
+
+            if (results.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Aucun résultat trouvé.");
+            }
+
+            return ResponseEntity.ok(results);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur serveur.");
+        }
+    }
+
 }

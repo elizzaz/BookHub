@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.query_dsl.MultiMatchQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
 import co.elastic.clients.elasticsearch.core.DeleteRequest;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,7 +67,9 @@ public class ElasticSearchService {
         }
     }
 
-    public List<Book> searchBooksByTitle(String title) throws IOException {
+    public List<Book> searchBooksByTitle(String title,
+                                         int page,
+                                         int size) throws IOException {
         // request match pour la recherche full-text
         Query query = MatchQuery.of(m -> m
                         .field("title")  // Champ
@@ -74,7 +78,9 @@ public class ElasticSearchService {
 
         SearchResponse<Book> response = elasticsearchClient.search(s -> s
                         .index("books") // index els
-                        .query(query),
+                        .query(query)
+                        .from(page * size)
+                        .size(size),
                 Book.class);
 
         return response.hits().hits().stream()
@@ -82,22 +88,48 @@ public class ElasticSearchService {
                 .collect(Collectors.toList());
     }
 
-    // TODO A CORRIGER
-//
-//    public List<Book> searchBooksByCategories(Set<String> categories) throws IOException {
-//        Query query = MatchQuery.of(m -> m
-//                .field("categories") // Champ "categories" (sans keyword)
-//                .query(String.join(" ", categories)) // Jointure des catégories
-//        )._toQuery();
-//
-//        SearchResponse<Book> response = elasticsearchClient.search(s -> s
-//                        .index("books")
-//                        .query(query), // Requête simple
-//                Book.class);
-//
-//        return response.hits().hits().stream()
-//                .map(Hit::source)
-//                .collect(Collectors.toList());
-//    }
+
+    public List<Book> searchBooksByCategories(Set<String> categories,
+                                              int page,
+                                              int size) throws IOException {
+        Query query = MatchQuery.of(m -> m
+                .field("categories")
+                .query(String.join(" ", categories))
+        )._toQuery();
+
+        SearchResponse<Book> response = elasticsearchClient.search(s -> s
+                        .index("books")
+                        .query(query)
+                        .from(page * size)
+                        .size(size),
+                Book.class);
+
+        return response.hits().hits().stream()
+                .map(Hit::source)
+                .collect(Collectors.toList());
+    }
+
+
+    public List<Book> searchFullText(String queryText,
+                                     int page,
+                                     int size) throws IOException {
+        Query query = Query.of(q -> q
+                .multiMatch(MultiMatchQuery.of(m -> m
+                        .query(queryText) // Texte à rechercher
+                        .fields("title^3", "author^2", "description")
+                )));
+
+
+        SearchResponse<Book> response = elasticsearchClient.search(s -> s
+                        .index("books")
+                        .query(query)
+                        .from(page * size)
+                        .size(size),
+                Book.class);
+
+        return response.hits().hits().stream()
+                .map(Hit::source)
+                .collect(Collectors.toList());
+    }
 
 }
