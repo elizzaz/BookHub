@@ -1,117 +1,128 @@
-# BookHub - Gestion de Livres avec Recherche Elasticsearch
+📚 BookHub
 
-## Description 📖
-BookHub est une application de gestion de livres qui permet d'effectuer des opérations CRUD sur une base de données MySQL et d'indexer automatiquement les données dans Elasticsearch pour permettre des recherches avancées.
+BookHub est une application de gestion de livres avec des fonctionnalités avancées de recherche intégrée grâce à Elasticsearch et Spring Boot. 🚀
 
----
+✨ Fonctionnalités
 
-## Fonctionnalités 🚀
+📖 Gestion des livres (CRUD) : Ajouter, modifier, supprimer et consulter des livres.
 
-### 1. Gestion des livres (CRUD)
-- Création, lecture, mise à jour et suppression de livres.
-- Validation des entrées utilisateur avec **Spring Boot Validation**.
+🔍 Recherche avancée avec Elasticsearch :
 
-### 2. Recherche avancée avec Elasticsearch 🔎
-- Recherche par **titre** (recherche full-text).
-- Recherche par **catégories** (correction simplifiée et fonctionnelle).
+🔎 Recherche par titre avec pagination.
 
-### 3. Sécurisation avec Spring Security 🔒
-- Authentification avec **JWT**.
-- Routes sécurisées pour les opérations Elasticsearch.
+🗂️ Recherche par catégories avec filtres exacts.
 
----
+📝 Recherche full-text sur plusieurs champs (titre, auteur, description).
 
-## Technologies utilisées 🛠️
+🔒 Sécurité avec JWT :
 
-- **Backend :** Java Spring Boot
-- **Base de données :** MySQL (avec Docker)
-- **Moteur de recherche :** Elasticsearch (avec Docker)
-- **ORM :** Hibernate / JPA
-- **Sécurité :** Spring Security avec JWT
-- **Gestion des dépendances :** Maven
-- **Tests API :** Postman
+🔑 Authentification avec tokens JWT.
 
----
+🛡️ Endpoints sécurisés pour la gestion des livres et la recherche.
 
-## Pré-requis ✅
+📊 Pagination et tri dynamique :
 
-- **Docker** installé.
-- **Java 17+** installé.
-- **Maven** installé.
-- Elasticsearch et MySQL doivent être lancés via Docker.
+📚 Gestion des grandes quantités de données.
 
----
+📌 Résultats triés par champ spécifié.
 
-## Installation 🛠️
+🔄 Synchronisation MySQL ↔ Elasticsearch :
 
-1. Cloner le repository :
-```bash
-git clone https://github.com/votre-repo/bookhub.git
-```
+📤 Indexation automatique des livres dans Elasticsearch lors des opérations CRUD.
 
-2. Démarrer MySQL et Elasticsearch avec Docker :
-```bash
-docker-compose up -d
-```
+🛠️ Technologies utilisées
 
-3. Configurer l'application dans **`application.properties`** :
-```properties
+Backend : Java, Spring Boot (JPA, Security).
+
+Base de données : MySQL (Docker).
+
+Recherche avancée : Elasticsearch (via RestHighLevelClient).
+
+Sécurité : JWT pour l'authentification.
+
+Tests API : Postman.
+
+🚀 Installation
+
+Clonez ce repository :
+
+git clone https://github.com/votre-utilisateur/BookHub.git
+
+Configurez la base de données MySQL via Docker :
+
+docker run --name bookHub -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:8
+
+Lancez Elasticsearch via Docker :
+
+docker run -d --name elasticsearch -p 9200:9200 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:8.6.2
+
+Configurez les paramètres dans application.properties :
+
 spring.datasource.url=jdbc:mysql://localhost:3306/bookHub
 spring.datasource.username=root
 spring.datasource.password=root
 elasticsearch.host=localhost
 elasticsearch.port=9200
-```
 
-4. Installer les dépendances et démarrer l'application :
-```bash
-mvn clean install
-mvn spring-boot:run
-```
+Lancez l'application :
 
----
+./mvnw spring-boot:run
 
-## Routes API 🌐
+🔗 Endpoints API
 
-### Authentification 🔐
-- **Inscription :** `POST /api/auth/register`
-- **Connexion :** `POST /api/auth/login`
+🔑 Authentification
 
-### Gestion des livres 📚
-- **Créer un livre :** `POST /api/books`
-- **Obtenir tous les livres :** `GET /api/books`
-- **Obtenir un livre par ID :** `GET /api/books/{id}`
-- **Mettre à jour un livre :** `PUT /api/books/{id}`
-- **Supprimer un livre :** `DELETE /api/books/{id}`
+📝 Register :
+POST /api/auth/register
+Body : JSON avec username, email, password.
 
-### Recherche Elasticsearch 🔎
-- **Recherche par titre :** `GET /api/els/bytitle?title=<title>`
-- **Recherche par catégories :** `GET /api/els/searchByCategories?categories=FICTION`
-- **Réindexation complète :** `POST /api/els/reindex`
+🔓 Login :
+POST /api/auth/login
+Body : JSON avec username, password.
 
----
+📘 Livres (CRUD)
 
-## Notes importantes ⚠️
+➕ Créer un livre :
+POST /api/books
+Body : JSON avec titre, auteur, description, catégories, etc.
 
-- Les requêtes protégées nécessitent un **JWT valide** dans les headers :
-```
-Authorization: Bearer <token>
-```
-- Réindexer les données après toute modification dans MySQL :
-```
-POST /api/els/reindex
-```
+✏️ Modifier un livre :
+PUT /api/books/{id}
 
----
+🗑️ Supprimer un livre :
+DELETE /api/books/{id}
 
-## Prochaines étapes 🛠️
+📚 Lister tous les livres :
+GET /api/books
 
-- Ajouter la **pagination** et le **tri** dans les recherches Elasticsearch.
-- Synchroniser automatiquement MySQL ↔ Elasticsearch avec **Logstash**.
-- Tests unitaires pour sécuriser les fonctionnalités critiques.
+🔍 Recherche avec Elasticsearch
 
----
+🔎 Recherche par titre :
+GET /api/els/bytitle?title=thriller&page=0&size=5
 
-## Auteur ✍️
-Développé par Elizzaz.
+🗂️ Recherche par catégories :
+GET /api/els/searchByCategories?categories=FICTION,THRILLER&page=0&size=5
+
+📝 Recherche full-text :
+GET /api/els/fulltext?query=thriller&page=0&size=5
+
+🧪 Tests
+
+✔️ Les tests ont été réalisés avec Postman pour valider toutes les fonctionnalités.
+
+⚠️ Les erreurs serveur et les réponses vides sont gérées proprement avec des codes HTTP adaptés (204, 404, 500).
+
+🔮 Prochaines étapes
+
+🔧 Ajouter des filtres supplémentaires (langue, disponibilité).
+
+🧪 Tests unitaires pour chaque méthode critique.
+
+📄 Creation d'un front, conteneurisation et déploiement
+
+👩‍💻 Auteurs
+
+Développé par Elizzaz 💻
+
+Supporté par Spring Boot et Elasticsearch 🚀.
 
